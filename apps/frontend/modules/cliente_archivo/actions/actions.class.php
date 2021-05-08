@@ -290,7 +290,9 @@ class cliente_archivoActions extends autoCliente_archivoActions
           $line_of_text = fgetcsv($file_handle, 2048, ";");
           if($i > 0)
           {
-            $error_falta_datos_linea = $this->guardarLinea($line_of_text, $cliente_archivo, $columns);
+            if($this->guardarLinea($line_of_text, $cliente_archivo, $columns)) {
+              $error_falta_datos_linea = true;
+            }
           }
           else
           {
