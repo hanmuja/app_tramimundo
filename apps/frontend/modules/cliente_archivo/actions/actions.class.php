@@ -371,7 +371,7 @@ class cliente_archivoActions extends autoCliente_archivoActions
     $data['origen'] = $linea[$columns['7']];
     $data['billing_document'] = $linea[$columns['8']];
 
-    if(!array_filter($data)) {
+    if(array_filter($data)) {
       $cliente_obj = new Cliente();
       $cliente_obj->setClienteArchivo($data['cliente_archivo']);
       $cliente_obj->setNoParte($data['no_parte']);
