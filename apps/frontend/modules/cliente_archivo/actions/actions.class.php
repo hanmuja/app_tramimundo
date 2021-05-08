@@ -371,17 +371,7 @@ class cliente_archivoActions extends autoCliente_archivoActions
     $data['origen'] = $linea[$columns['7']];
     $data['billing_document'] = $linea[$columns['8']];
 
-    $tiene_valores = false;
-    $faltan_valores = false;
-    foreach($data as $k => $value) {
-      if($value) {
-        $tiene_valores = true;
-      } else {
-        $faltan_valores = true;
-      }
-    }
-
-    if($tiene_valores) {
+    if(!array_filter($data)) {
       $cliente_obj = new Cliente();
       $cliente_obj->setClienteArchivo($data['cliente_archivo']);
       $cliente_obj->setNoParte($data['no_parte']);
@@ -396,7 +386,7 @@ class cliente_archivoActions extends autoCliente_archivoActions
       $cliente_obj->save();
     }
 
-    return $faltan_valores;
+    return false;
   }
   
   public function executeGenerarReporteNoCoincidencias($request)
