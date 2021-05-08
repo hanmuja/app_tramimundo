@@ -1,0 +1,37 @@
+BaseDatosArchivo:
+  columns:
+    nombre_archivo: { type: string(255) }
+    fecha_subida: { type: timestamp }
+    cantidad_datos: { type: integer }
+
+BaseDatos:
+  columns:
+    archivo_id: { type: integer }
+    no_parte: { type: string(255) }
+    descripcion: { type: string(255) }
+    fraccion: { type: string(255) }
+    uc: { type: string(255) }
+    cantidad: { type: string(255) }
+    valor: { type: double }
+    origen: { type: string(255) }
+  relations:
+    BaseDatosArchivo: { onDelete: cascade, local: archivo_id, foreign: id }
+
+ClienteArchivo:
+  columns:
+    nombre_archivo: { type: string(255) }
+    fecha_subida: { type: timestamp }
+    cantidad_datos: { type: integer }
+
+Cliente:
+  columns:
+    archivo_id: { type: integer }
+    no_parte: { type: string(255) }
+    descripcion: { type: string(255) }
+    fraccion: { type: string(255) }
+    uc: { type: string(255) }
+    cantidad: { type: string(255) }
+    valor: { type: double }
+    origen: { type: string(255) }
+  relations:
+    ClienteArchivo: { onDelete: cascade, local: archivo_id, foreign: id }

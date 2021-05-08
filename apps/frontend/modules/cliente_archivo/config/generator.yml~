@@ -1,0 +1,36 @@
+generator:
+  class: sfDoctrineGenerator
+  param:
+    model_class:           ClienteArchivo
+    theme:                 admin
+    non_verbose_templates: true
+    with_show:             false
+    singular:              ~
+    plural:                ~
+    route_prefix:          cliente_archivo
+    with_doctrine_route:   true
+    actions_base_class:    sfActions
+
+    config:
+      actions: ~
+      fields:  ~
+      list:
+        title: Clientes Archivos Subidos
+        display: [nombre_archivo, fecha_subida, cantidad_datos]
+        sort: [fecha_subida, desc]
+        actions:
+          subir_archivo: { label: Subir Archivo CSV, action: subirArchivo }
+          clientes: { label: Ver Clientes, action: verClientes }
+        batch_actions: []
+        object_actions:
+          reporte_coincidencias:
+            label: Generar reporte coincidencias
+            action: generarReporteCoincidencias
+            params:
+              onclick: return alert("Esto tardara unos minutos para generar el archivo.");
+          reporte_no_coincidencias: { label: Generar reporte de NO coincidencias, action: generarReporteNoCoincidencias, params: onclick: return alert("Esto tardara unos minutos para generar el archivo."); }
+      filter:
+        display: [nombre_archivo, fecha_subida]
+      form:    ~
+      edit:    ~
+      new:     ~

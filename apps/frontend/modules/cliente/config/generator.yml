@@ -1,0 +1,26 @@
+generator:
+  class: sfDoctrineGenerator
+  param:
+    model_class:           Cliente
+    theme:                 admin
+    non_verbose_templates: true
+    with_show:             false
+    singular:              ~
+    plural:                ~
+    route_prefix:          cliente
+    with_doctrine_route:   true
+    actions_base_class:    sfActions
+
+    config:
+      actions: ~
+      fields:  ~
+      list:
+        title: Registros Cliente
+        display: [ClienteArchivo, billing_document, no_parte, descripcion, fraccion, uc, cantidad, valor, origen, peso]
+      filter:
+        display: [archivo_id, billing_document, no_parte, uc]
+      form:    ~
+      edit:
+        title: Editar
+      new:
+        title: Crear

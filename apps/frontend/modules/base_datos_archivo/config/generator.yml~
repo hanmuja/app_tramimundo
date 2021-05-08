@@ -1,0 +1,36 @@
+generator:
+  class: sfDoctrineGenerator
+  param:
+    model_class:           BaseDatosArchivo
+    theme:                 admin
+    non_verbose_templates: true
+    with_show:             false
+    singular:              ~
+    plural:                ~
+    route_prefix:          base_datos_archivo
+    with_doctrine_route:   true
+    actions_base_class:    sfActions
+
+    config:
+      actions: ~
+      fields:  ~
+      list:
+        title: Base de datos Archivos Subidos
+        display: [nombre_archivo, fecha_subida, cantidad_datos]
+        sort: [fecha_subida, desc]
+        actions:
+          subir_archivo: { label: Subir Archivo CSV, action: subirArchivo }
+          basedatos: { label: Ver Base de Datos, action: verBasedatos }
+        batch_actions: []
+        object_actions:
+          _delete: ~
+          borrar:
+            label: Borrar
+            action: deleteAll
+            params:
+              onclick: return confirm("Esta seguro?");
+      filter:
+        display: [nombre_archivo, fecha_subida]
+      form:    ~
+      edit:    ~
+      new:     ~

@@ -1,0 +1,6 @@
+<ul>
+  <li <?php echo ($modulo == 'base_datos_archivo') ? 'class="sel"' : '' ?>><?php echo link_to('Archivos Base de Datos Tramimundo', '@base_datos_archivo') ?></li>
+  <li <?php echo ($modulo == 'base_datos') ? 'class="sel"' : '' ?>><?php echo link_to('Base de Datos Tramimundo', '@base_datos') ?></li>
+  <li <?php echo ($modulo == 'cliente_archivo') ? 'class="sel"' : '' ?>><?php echo link_to('Archivos Clientes', '@cliente_archivo') ?></li>
+  <li <?php echo ($modulo == 'cliente') ? 'class="sel"' : '' ?>><?php echo link_to('Base de Datos Clientes', '@cliente') ?></li>
+</ul>
