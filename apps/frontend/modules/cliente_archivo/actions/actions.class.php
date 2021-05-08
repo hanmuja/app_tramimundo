@@ -355,22 +355,24 @@ class cliente_archivoActions extends autoCliente_archivoActions
   
   public function guardarLinea($linea, $cliente_archivo, $columns)
   {
-    $cliente_obj = new Cliente();
-    $cliente_obj->setClienteArchivo($cliente_archivo);
     $no_parte = str_replace('.', '', str_replace(' ', '', $linea[$columns['1']]));
-    $cliente_obj->setNoParte($no_parte);
-    $cliente_obj->setDescripcion($linea[$columns['2']]);
-    $cliente_obj->setFraccion($linea[$columns['3']]);
-    $cliente_obj->setUc($linea[$columns['4']]);
-    $cantidad = str_replace('.', '', str_replace(' ', '', $linea[$columns['5']]));
-    $cliente_obj->setCantidad($cantidad);
-    $valor = str_replace(',', '', str_replace('$', '', str_replace(' ', '', $linea[$columns['6']])));
-    $cliente_obj->setValor($valor);
-    $cliente_obj->setOrigen($linea[$columns['7']]);
-    $cliente_obj->setBillingDocument($linea[$columns['8']]);
-	$peso = str_replace(',', '', str_replace('$', '', str_replace(' ', '', $linea[$columns['9']])));
-	$cliente_obj->setPeso($peso);
-    $cliente_obj->save();
+    if($no_parte) {
+      $cliente_obj = new Cliente();
+      $cliente_obj->setClienteArchivo($cliente_archivo);
+      $cliente_obj->setNoParte($no_parte);
+      $cliente_obj->setDescripcion($linea[$columns['2']]);
+      $cliente_obj->setFraccion($linea[$columns['3']]);
+      $cliente_obj->setUc($linea[$columns['4']]);
+      $cantidad = str_replace('.', '', str_replace(' ', '', $linea[$columns['5']]));
+      $cliente_obj->setCantidad($cantidad);
+      $valor = str_replace(',', '', str_replace('$', '', str_replace(' ', '', $linea[$columns['6']])));
+      $cliente_obj->setValor($valor);
+      $cliente_obj->setOrigen($linea[$columns['7']]);
+      $cliente_obj->setBillingDocument($linea[$columns['8']]);
+      $peso = str_replace(',', '', str_replace('$', '', str_replace(' ', '', $linea[$columns['9']])));
+      $cliente_obj->setPeso($peso);
+      $cliente_obj->save();
+    }
   }
   
   public function executeGenerarReporteNoCoincidencias($request)
