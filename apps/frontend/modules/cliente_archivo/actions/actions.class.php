@@ -373,7 +373,7 @@ class cliente_archivoActions extends autoCliente_archivoActions
 
     if(array_filter($data)) {
       $cliente_obj = new Cliente();
-      $cliente_obj->setClienteArchivo($data['cliente_archivo']);
+      $cliente_obj->setClienteArchivo($cliente_archivo);
       $cliente_obj->setNoParte($data['no_parte']);
       $cliente_obj->setDescripcion($data['descripcion']);
       $cliente_obj->setFraccion($data['fraccion']);
