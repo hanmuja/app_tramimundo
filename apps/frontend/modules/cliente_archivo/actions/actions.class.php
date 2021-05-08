@@ -317,16 +317,17 @@ class cliente_archivoActions extends autoCliente_archivoActions
         {
           $cliente_archivo->setCantidadDatos(($i-2));
           $cliente_archivo->save();
-          $this->getUser()->setFlash('notice', "El Archivo '$archivo_nombre' fue cargado con exito.", false);
-          $this->redirect('@cliente_archivo');
+
+          if($error_falta_datos_linea) {
+            $this->getUser()->setFlash('notice', "El Archivo '$archivo_nombre' fue cargado, pero tiene lineas con datos faltantes que van a salir en el archivo de no coincidencias", false); 
+          } else {
+            $this->getUser()->setFlash('notice', "El Archivo '$archivo_nombre' fue cargado con exito.", false);
+            $this->redirect('@cliente_archivo');
+          }
         }
         else
         {
           $this->getUser()->setFlash('notice', "El Archivo '$archivo_nombre' tiene los titulos de las columnas malos.", false);
-        }
-
-        if($error_falta_datos_linea) {
-          $this->getUser()->setFlash('error', 'El Archivo tiene lineas con datos faltantes que van a salir en el archivo de no coincidencias', false); 
         }
       }
       else
@@ -371,7 +372,11 @@ class cliente_archivoActions extends autoCliente_archivoActions
     $data['origen'] = $linea[$columns['7']];
     $data['billing_document'] = $linea[$columns['8']];
 
-    if(array_filter($data)) {
+    $data_filtered = array_filter($data);
+
+    $error_falta_datos_linea = ($data_filtered && $data != $data_filtered);
+
+    if($data_filtered) {
       $cliente_obj = new Cliente();
       $cliente_obj->setClienteArchivo($cliente_archivo);
       $cliente_obj->setNoParte($data['no_parte']);
@@ -386,7 +391,7 @@ class cliente_archivoActions extends autoCliente_archivoActions
       $cliente_obj->save();
     }
 
-    return false;
+    return $error_falta_datos_linea;
   }
   
   public function executeGenerarReporteNoCoincidencias($request)
