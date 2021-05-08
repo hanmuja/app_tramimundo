@@ -284,12 +284,13 @@ class cliente_archivoActions extends autoCliente_archivoActions
         $file_handle = fopen($archivo_tmp, "r");
         $i = 0;
         $columns = array();
+        $error_falta_datos_linea = false;
         while (!feof($file_handle))
         {
           $line_of_text = fgetcsv($file_handle, 2048, ";");
           if($i > 0)
           {
-            $this->guardarLinea($line_of_text, $cliente_archivo, $columns);
+            $error_falta_datos_linea = $this->guardarLinea($line_of_text, $cliente_archivo, $columns);
           }
           else
           {
@@ -323,6 +324,10 @@ class cliente_archivoActions extends autoCliente_archivoActions
         {
           $this->getUser()->setFlash('notice', "El Archivo '$archivo_nombre' tiene los titulos de las columnas malos.", false);
         }
+
+        if($error_falta_datos_linea) {
+          $this->getUser()->setFlash('error', 'El Archivo tiene lineas con datos faltantes que van a salir en el archivo de no coincidencias', false); 
+        }
       }
       else
       {
@@ -355,24 +360,43 @@ class cliente_archivoActions extends autoCliente_archivoActions
   
   public function guardarLinea($linea, $cliente_archivo, $columns)
   {
-    $no_parte = str_replace('.', '', str_replace(' ', '', $linea[$columns['1']]));
-    if($no_parte) {
+    $data = [];
+    $data['no_parte'] = str_replace('.', '', str_replace(' ', '', $linea[$columns['1']]));
+    $data['cantidad'] = str_replace('.', '', str_replace(' ', '', $linea[$columns['5']]));
+    $data['valor'] = str_replace(',', '', str_replace('$', '', str_replace(' ', '', $linea[$columns['6']])));
+    $data['peso'] = str_replace(',', '', str_replace('$', '', str_replace(' ', '', $linea[$columns['9']])));
+    $data['descripcion'] = $linea[$columns['2']];
+    $data['fraccion'] = $linea[$columns['3']];
+    $data['uc'] = $linea[$columns['4']];
+    $data['origen'] = $linea[$columns['7']];
+    $data['billing_document'] = $linea[$columns['8']];
+
+    $tiene_valores = false;
+    $faltan_valores = false;
+    foreach($data as $k => $value) {
+      if($value) {
+        $tiene_valores = true;
+      } else {
+        $faltan_valores = true;
+      }
+    }
+
+    if($tiene_valores) {
       $cliente_obj = new Cliente();
-      $cliente_obj->setClienteArchivo($cliente_archivo);
-      $cliente_obj->setNoParte($no_parte);
-      $cliente_obj->setDescripcion($linea[$columns['2']]);
-      $cliente_obj->setFraccion($linea[$columns['3']]);
-      $cliente_obj->setUc($linea[$columns['4']]);
-      $cantidad = str_replace('.', '', str_replace(' ', '', $linea[$columns['5']]));
-      $cliente_obj->setCantidad($cantidad);
-      $valor = str_replace(',', '', str_replace('$', '', str_replace(' ', '', $linea[$columns['6']])));
-      $cliente_obj->setValor($valor);
-      $cliente_obj->setOrigen($linea[$columns['7']]);
-      $cliente_obj->setBillingDocument($linea[$columns['8']]);
-      $peso = str_replace(',', '', str_replace('$', '', str_replace(' ', '', $linea[$columns['9']])));
-      $cliente_obj->setPeso($peso);
+      $cliente_obj->setClienteArchivo($data['cliente_archivo']);
+      $cliente_obj->setNoParte($data['no_parte']);
+      $cliente_obj->setDescripcion($data['descripcion']);
+      $cliente_obj->setFraccion($data['fraccion']);
+      $cliente_obj->setUc($data['uc']);
+      $cliente_obj->setCantidad($data['cantidad']);
+      $cliente_obj->setValor($data['valor']);
+      $cliente_obj->setOrigen($data['origen']);
+      $cliente_obj->setBillingDocument($data['billing_document']);
+      $cliente_obj->setPeso($data['peso']);
       $cliente_obj->save();
     }
+
+    return $faltan_valores;
   }
   
   public function executeGenerarReporteNoCoincidencias($request)
